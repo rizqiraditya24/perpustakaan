@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -42,7 +41,8 @@ class RegisteredUserController extends Controller
             'telepon'      => $request->telepon,
             'alamat'       => $request->alamat,
             'password'     => Hash::make($request->password),
-            'role'         => 'siswa',
+            'role'            => 'siswa',
+            'approval_status' => 'menunggu',
         ]);
 
         Siswa::create([
@@ -56,8 +56,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect()->route('siswa.dashboard');
+        return redirect()->route('login')->with('status', 'Pendaftaran berhasil. Akun kamu sedang menunggu persetujuan admin.');
     }
 }
