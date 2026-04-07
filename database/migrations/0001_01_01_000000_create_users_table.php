@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nama_lengkap');
             $table->text('alamat')->nullable();
             $table->string('telepon', 20)->nullable();
+            $table->enum('approval_status', ['menunggu', 'disetujui', 'ditolak'])->default('menunggu');
             $table->rememberToken();
             $table->timestamps();
         });

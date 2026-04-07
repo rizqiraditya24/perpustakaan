@@ -17,9 +17,10 @@ class AdminSeeder extends Seeder
                 'nama_lengkap' => 'Administrator',
                 'email'        => 'admin@example.com',
                 'password'     => Hash::make('123456789'),
-                'role'         => 'admin',
-                'alamat'       => 'Jl. Contoh No. 1',
-                'telepon'      => '08123456789',
+                'role'            => 'admin',
+                'alamat'          => 'Jl. Contoh No. 1',
+                'telepon'         => '08123456789',
+                'approval_status' => 'disetujui',
             ]
         );
     }

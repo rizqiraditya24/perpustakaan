@@ -50,6 +50,21 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Cek persetujuan untuk siswa
+        $user = Auth::user();
+        if ($user->role === 'siswa' && $user->approval_status !== 'disetujui') {
+            Auth::logout();
+            RateLimiter::hit($this->throttleKey());
+
+            $pesan = match($user->approval_status) {
+                'menunggu' => 'Akun kamu belum disetujui oleh admin. Silakan tunggu konfirmasi.',
+                'ditolak'  => 'Akun kamu telah ditolak oleh admin. Hubungi pihak sekolah untuk informasi lebih lanjut.',
+                default    => 'Akun kamu tidak dapat mengakses sistem.',
+            };
+
+            throw ValidationException::withMessages(['email' => $pesan]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

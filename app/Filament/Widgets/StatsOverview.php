@@ -22,6 +22,9 @@ class StatsOverview extends BaseWidget
             Stat::make('Total Pinjaman', Peminjaman::where('status', 'dipinjam')->count())
                 ->icon('heroicon-o-arrow-right-circle')
                 ->color('warning'),
+            Stat::make('Menunggu Persetujuan', \App\Models\User::where('role', 'siswa')->where('approval_status', 'menunggu')->count())
+                ->icon('heroicon-o-clock')
+                ->color('danger'),
         ];
     }
 }

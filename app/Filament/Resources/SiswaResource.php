@@ -16,6 +16,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -34,8 +35,20 @@ class SiswaResource extends Resource
         return $form->schema([
             Section::make('Data Akun')->schema([
                 TextInput::make('user.nama_lengkap')->label('Nama Lengkap')->required()->maxLength(255),
-                TextInput::make('user.username')->label('Username')->required()->unique('users', 'username', ignoreRecord: true)->maxLength(50),
-                TextInput::make('user.email')->label('Email')->email()->required()->unique('users', 'email', ignoreRecord: true),
+                TextInput::make('user.username')->label('Username')->required()
+                    ->unique('users', 'username', modifyRuleUsing: function ($rule, $get, $livewire) {
+                        if (isset($livewire->record)) {
+                            $rule->ignore($livewire->record->user_id);
+                        }
+                        return $rule;
+                    })->maxLength(50),
+                TextInput::make('user.email')->label('Email')->email()->required()
+                    ->unique('users', 'email', modifyRuleUsing: function ($rule, $get, $livewire) {
+                        if (isset($livewire->record)) {
+                            $rule->ignore($livewire->record->user_id);
+                        }
+                        return $rule;
+                    }),
                 TextInput::make('user.password')->label('Password')->password()
                     ->dehydrateStateUsing(fn ($state) => filled($state) ? Hash::make($state) : null)
                     ->dehydrated(fn ($state) => filled($state))
@@ -71,10 +84,29 @@ class SiswaResource extends Resource
                         'lulus'  => 'info',
                         'keluar' => 'danger',
                     }),
+                SelectColumn::make('approval_status')
+                    ->label('Persetujuan')
+                    ->options([
+                        'menunggu'  => 'Menunggu',
+                        'disetujui' => 'Disetujui',
+                        'ditolak'   => 'Ditolak',
+                    ])
+                    ->selectablePlaceholder(false),
             ])
             ->filters([
                 SelectFilter::make('status')
                     ->options(['aktif' => 'Aktif', 'lulus' => 'Lulus', 'keluar' => 'Keluar']),
+                SelectFilter::make('approval_status')
+                    ->label('Status Persetujuan')
+                    ->options([
+                        'menunggu'  => 'Menunggu',
+                        'disetujui' => 'Disetujui',
+                        'ditolak'   => 'Ditolak',
+                    ])
+                    ->query(fn ($query, $data) => $data['value']
+                        ? $query->whereHas('user', fn ($q) => $q->where('approval_status', $data['value']))
+                        : $query
+                    ),
             ])
             ->actions([
                 ViewAction::make(),

@@ -38,4 +38,14 @@ class Siswa extends Model
     {
         return $this->hasMany(Peminjaman::class);
     }
+
+    public function getApprovalStatusAttribute(): string
+    {
+        return $this->user?->approval_status ?? 'menunggu';
+    }
+
+    public function setApprovalStatusAttribute(string $value): void
+    {
+        $this->user?->update(['approval_status' => $value]);
+    }
 }
