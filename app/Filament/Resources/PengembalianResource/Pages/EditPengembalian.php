@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Filament\Resources\PengembalianResource\Pages;
+
+use App\Filament\Resources\PengembalianResource;
+use Filament\Actions;
+use Filament\Resources\Pages\EditRecord;
+
+class EditPengembalian extends EditRecord
+{
+    protected static string $resource = PengembalianResource::class;
+
+    protected ?string $heading = 'Edit Pengembalian';
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\DeleteAction::make(),
+        ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+}
