@@ -23,6 +23,7 @@ use Filament\Tables\Table;
 class KategoriBukuResource extends Resource
 {
     protected static ?string $model = KategoriBuku::class;
+    protected static ?string $slug = 'kategori-buku';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationLabel = 'Kategori Buku';
     protected static ?string $navigationGroup = 'Master Data';

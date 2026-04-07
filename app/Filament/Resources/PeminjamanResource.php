@@ -26,6 +26,7 @@ use Illuminate\Support\Str;
 class PeminjamanResource extends Resource
 {
     protected static ?string $model = Peminjaman::class;
+    protected static ?string $slug = 'peminjaman';
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-circle';
     protected static ?string $navigationLabel = 'Peminjaman';
     protected static ?string $navigationGroup = 'Transaksi';

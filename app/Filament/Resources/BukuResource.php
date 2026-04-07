@@ -29,6 +29,7 @@ use Filament\Infolists\Components\ImageEntry;
 class BukuResource extends Resource
 {
     protected static ?string $model = Buku::class;
+    protected static ?string $slug = 'buku';
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationLabel = 'Buku';
     protected static ?string $navigationGroup = 'Master Data';
